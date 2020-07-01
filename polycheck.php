@@ -28,9 +28,9 @@ function update_polyscript_state($state) {
             break;
         case "scrambling":
             if (polyscript_check()) {
-                update_option('polyscript_state', $state);
+                update_option('polyscript_state', 'on');
             } else {
-                update_option('polysript_state', 'on');
+                update_option('polyscript_state', $state);
             }
             break;
         case "on":
@@ -67,11 +67,12 @@ function refresh_polyscript_state() {
 }
 
 function polyscript_check() {
-    if (assert(eval("if (true) { echo ''; return 1; }"))) {
-        return false;
-    } else {
+    try {
+        $result = eval("if (true) { echo ''; return 1; }");
+    } catch (ParseError $result) {
         return true;
     }
+    return false;
 }
 
 function check_state() {

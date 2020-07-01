@@ -1,9 +1,13 @@
 <?php
 if ( isset( $_POST['submit'] ) ) {
 check_admin_referer( 'polyscript-admin' );
-Polyscript::update_options($_POST['notification-answer'], $_POST['widget-enable']);
-echo '<div id="message" class="updated"><p>' . __( 'Options updated. Changes to the Admin Menu and Admin Bar will not
-appear until you leave or reload this page.', 'polyscript-settings' );'</p></div>';
+Polyscript::update_options($_POST['notification-answer'], $_POST['widget-enable']) ?>
+    <div class="akismet-setup-instructions">
+	<p><?php esc_html_e( 'Settings saved.', 'polyscript-settings' ); ?></p>
+</div>
+<?php
+//echo '<div id="message" class="updated"><p>' . __( 'Options updated. Changes to the Admin Menu and Admin Bar will not
+//appear until you leave or reload this page.', 'polyscript-settings' );'</p></div>';
 }
 ?>
 <div class="wrap">
@@ -45,6 +49,7 @@ appear until you leave or reload this page.', 'polyscript-settings' );'</p></div
             </li>
         </ul>
         <?php wp_nonce_field('polyscript-admin'); ?>
-        <p class="submit"><input class="ps-button ps-accept" type="submit" name="submit"
-                                 value="<?php _e('Save Changes', 'polyscript-settings'); ?>"></p>
+        <input class="ps-button ps-accept" type="submit" name="submit"
+                                 value="<?php _e('Save Changes', 'polyscript-settings'); ?>">
+    </form>
 </div>

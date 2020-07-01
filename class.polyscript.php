@@ -163,10 +163,10 @@ class Polyscript
     public static function shift_state($state)
     {
         switch ($state) {
-            case 'rescramble':
+            case 'scrambling':
                 polyscript_rescramble();
                 break;
-            case 'disable':
+            case 'disabling':
                 polyscript_disable();
                 break;
             default:
