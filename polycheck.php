@@ -1,7 +1,5 @@
 <?php
-
 /*
-Plugin Name: Polyscripting
 Copyright (c) 2020 Polyverse Corporation
 */
 
@@ -94,11 +92,16 @@ function check_state() {
 }
 
 function polyscript_rescramble() {
-    //TODO: call funciton;
+    $host = "127.0.0.1";
+    $port = 5353;
+    // No Timeout
+    set_time_limit(0);
+    $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");
+    $result = socket_bind($socket, $host, $port) or die("Could not bind to socket\n");
+    socket_write ( $socket , "scramble");
     update_polyscript_state("scrambling");
 }
 
 function polyscript_disable() {
-    //TODO: call function
     update_polyscript_state("disabling");
 }
