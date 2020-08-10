@@ -22,7 +22,13 @@ define( 'POLYSCRIPT__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 register_activation_hook( __FILE__, array( 'Polyscript', 'plugin_activation' ) );
 
 
-require_once( POLYSCRIPT__PLUGIN_DIR . 'polycheck.php' );
 require_once( POLYSCRIPT__PLUGIN_DIR . 'class.polyscript.php' );
 
+if ( is_admin() ) {
+    require_once( POLYSCRIPT__PLUGIN_DIR . 'polystate.php' );
+    add_action( 'init', array( 'Polystate', 'init' ) );
+}
+
 add_action( 'init', array( 'Polyscript', 'init' ) );
+
+
