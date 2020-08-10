@@ -83,7 +83,7 @@ class Polystate
     }
 
     private static function check_rescramble_shift() {
-        if (get_option('polyscript_dummy') != hash_file('md5', plugin_dir_path(__FILE__) . 'dummy.php')) {
+        if (get_option('polyscript_dummy') != hash_file('md5', plugin_dir_path(__FILE__) . 'includes/dummy.php')) {
             delete_option('polyscript_dummy');
             self::update_saved_state('on');
         } else {
@@ -111,7 +111,7 @@ class Polystate
                 break;
             case 'rescrambling':
                 $signal="2 ";
-                update_option('polyscript_dummy', hash_file('md5', plugin_dir_path(__FILE__) . 'dummy.php'));
+                update_option('polyscript_dummy', hash_file('md5', plugin_dir_path(__FILE__) . 'includes/dummy.php'));
                 break;
             case 'disabling':
                 $signal="3 ";

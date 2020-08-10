@@ -37,7 +37,7 @@ class Polyscript
 
             wp_add_dashboard_widget(
                 self::WIDGET_KEY,
-                esc_html__('Polyscript', 'polyscripting_for_wordpress'),
+                esc_html__('Polyscripting', 'polyscripting_for_wordpress'),
                 array('Polyscript', 'dashboard_widget_content')
             );
 
@@ -117,7 +117,7 @@ class Polyscript
                 '<p id="poly"><span class="screen-reader-text">%s </span><span dir="ltr"%s>%s</span></p>',
                 __('Polyscript Status:'),
                 $lang,
-                __('Polyscript Status: ' . self::polyscript_enabled()), 'textdomain');
+                __('Polyscript Status: ' . Polystate::get_live_state()), 'textdomain');
         }
     }
 
@@ -146,8 +146,12 @@ class Polyscript
 
     private static function polyscript_enabled()
     {
-        return Polystate::get_live_state() ? "Enabled" : "Disabled";
-
+        try {
+            $result = eval("if (true) { echo ''; return 1; }");
+        } catch (ParseError $result) {
+            return 'Enabled';
+        }
+        return 'Disabled';
     }
 
     public static function plugin_activation()
