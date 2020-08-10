@@ -117,7 +117,7 @@ class Polyscript
                 '<p id="poly"><span class="screen-reader-text">%s </span><span dir="ltr"%s>%s</span></p>',
                 __('Polyscript Status:'),
                 $lang,
-                __('Polyscript Status: ' . Polystate::get_live_state()), 'textdomain');
+                __('Polyscript Status: ' . self::polyscript_enabled(), 'textdomain'));
         }
     }
 
