@@ -1,6 +1,8 @@
 <?php
 
-class Polystate
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+class PolyscriptingState
 {
     private static $initiated = false;
     private static $state = 'unknown';

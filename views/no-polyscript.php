@@ -1,3 +1,6 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+?>
 <div id="polyscript-plugin-container">
     <div class="polyscript-masthead">
         <div class="polyscript-masthead__inside-container">

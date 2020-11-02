@@ -1,22 +1,27 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+?>
+
+
 <div name="button-dib" class="inline">
     <?php
     if (isset($_POST['polyscript-rescramble'])) {
         check_admin_referer('polyscript-admin');
-        Polystate::shift_state('rescrambling'); ?>
+        PolyscriptingState::shift_state('rescrambling'); ?>
         <script>window.location.reload()</script>
         <div>Scrambling...</div>
         <?php
     }
     if (isset($_POST['polyscript-scramble'])) {
         check_admin_referer('polyscript-admin');
-        Polystate::shift_state('scrambling'); ?>
+        PolyscriptingState::shift_state('scrambling'); ?>
         <script>window.location.reload()</script>
         <div>Scrambling...</div>
         <?php
     }
     if (isset($_POST['polyscript-disable'])) {
         check_admin_referer('polyscript-admin');
-        Polystate::shift_state('disabling');
+        PolyscriptingState::shift_state('disabling');
         ?>
         <script>window.location.reload()</script>
         <div>Disabling...</div>
@@ -40,7 +45,7 @@
                        type="submit"
                        name="polyscript-rescramble"
                        id="rescramble"
-                       value="<?php _e('Rescramble', 'polyscript-settings'); ?>">
+                       value="<?php esc_attr_e('Rescramble', 'polyscript-settings'); ?>">
             </button>
             <button class="submit" title="Disable Polyscripting.">
                 <input
@@ -48,7 +53,7 @@
                     type="submit"
                     name="polyscript-disable"
                     id="unscramble"
-                    value="<?php _e('Unscramble', 'polyscript-settings'); ?>">
+                    value="<?php esc_attr_e('Unscramble', 'polyscript-settings'); ?>">
             </button>
             <?php
         } else if ($state === 'off') { ?>
@@ -58,14 +63,14 @@
                     type="submit"
                     name="polyscript-scramble"
                     id="scramble"
-                    value="<?php _e('Scramble', 'polyscript-settings'); ?>">
+                    value="<?php esc_attr_e('Scramble', 'polyscript-settings'); ?>">
             </button>
             <button disabled class="submit" title="Polyscripting not enabled.">
                 <input disabled
                        class="ps-button ps-unscramble ps-disabled"
                        type="submit" name=""
                        id="unscramble"
-                       value="<?php _e('Unscramble', 'polyscript-settings'); ?>">
+                       value="<?php esc_attr_e('Unscramble', 'polyscript-settings'); ?>">
             </button>
         <?php } ?>
     </form>

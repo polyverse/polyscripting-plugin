@@ -3,6 +3,8 @@
 Copyright (c) 2020 Polyverse Corporation
 */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class Polyscript
 {
     const WIDGET_KEY = "Polyscript_Widget";
@@ -51,7 +53,7 @@ class Polyscript
 
     public static function dashboard_widget_content()
     {
-        Polyscript::view('widget', array('state' => Polystate::get_saved_state()));
+        Polyscript::view('widget', array('state' => PolyscriptingState::get_saved_state()));
     }
 
     public static function polyscript_load_styles()
@@ -93,7 +95,7 @@ class Polyscript
 
     public static function view($name, array $args = array())
     {
-        Polystate::sanitize_state();
+        PolyscriptingState::sanitize_state();
         foreach ($args AS $key => $val) {
             $$key = $val;
         }
@@ -140,7 +142,7 @@ class Polyscript
             Polyscript::view('settings', array(
                 'header_type' => self::header_type(),
                 'widget_set' => self::widget_set(),
-                'state' => Polystate::get_saved_state()));
+                'state' => PolyscriptingState::get_saved_state()));
         }
     }
 
@@ -157,7 +159,7 @@ class Polyscript
     public static function plugin_activation()
     {
         add_option('polyscript_header_set', 'admin-bar');
-        Polystate::get_live_state() == 'Enabled'
+        PolyscriptingState::get_live_state() == 'Enabled'
             ? update_option('polyscript_state', 'on')
             :  update_option('polyscript_state', 'off') ;
     }

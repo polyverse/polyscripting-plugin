@@ -1,3 +1,6 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+?>
 <div class="widget">
     <?php if ( Polyscript::dependencies_check() ) {
         Polyscript::view('buttons', array('state' => $state));
