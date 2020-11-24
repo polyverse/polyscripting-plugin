@@ -9,6 +9,7 @@ class Polyscript
 {
     const WIDGET_KEY = "Polyscript_Widget";
 
+    private static $dependencies = false;
     private static $initiated = false;
 
     public static function init()
@@ -35,7 +36,8 @@ class Polyscript
     public static function register_dashboard_widget()
     {
         global $wp_meta_boxes;
-        if (self::widget_set()) {
+        if (self::widget_set() && self::dependencies_check())
+        {
 
             wp_add_dashboard_widget(
                 self::WIDGET_KEY,
@@ -65,7 +67,6 @@ class Polyscript
 
     public static function polyscript_action_links($links)
     {
-
         $links = array_merge(array(
             '<a href="' . esc_url(admin_url('options-general.php?page=polyscript')) . '">' . __('Settings', 'textdomain') . '</a>'),
             $links);
@@ -95,7 +96,6 @@ class Polyscript
 
     public static function view($name, array $args = array())
     {
-        PolyscriptingState::sanitize_state();
         foreach ($args AS $key => $val) {
             $$key = $val;
         }

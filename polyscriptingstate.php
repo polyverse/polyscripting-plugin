@@ -36,6 +36,10 @@ class PolyscriptingState
     }
 
     static function sanitize_state() {
+        if (!Polyscript::dependencies_check()) {
+            return;
+        }
+
         $cur_state = self::get_saved_state();
         if ($cur_state == 'on' && !self::is_polyscripted()) {
             self::signal_state_shift('scrambling');
@@ -69,6 +73,10 @@ class PolyscriptingState
 
     public static function shift_state($state)
     {
+        if (!Polyscript::dependencies_check()) {
+            return;
+        }
+
         switch ($state) {
             case 'scrambling':
                 self::signal_state_shift('scrambling');
@@ -107,6 +115,7 @@ class PolyscriptingState
     }
 
     private static function signal_state_shift($new_state) {
+
         switch($new_state) {
             case 'scrambling':
                 $signal="1 ";
@@ -134,6 +143,7 @@ class PolyscriptingState
     }
 
     private static function send_scramble_signal($signal) {
+
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         if (!$socket) {
             return false;

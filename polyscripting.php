@@ -28,7 +28,7 @@ register_activation_hook( __FILE__, array( 'Polyscript', 'plugin_activation' ) )
 
 require_once( POLYSCRIPT__PLUGIN_DIR . 'class.polyscript.php' );
 
-if ( is_admin() ) {
+if ( is_admin() && Polyscript::dependencies_check()) {
     require_once( POLYSCRIPT__PLUGIN_DIR . 'polyscriptingstate.php' );
     add_action( 'init', array( 'PolyscriptingState', 'init' ) );
 }
