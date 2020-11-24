@@ -9,7 +9,6 @@ class Polyscript
 {
     const WIDGET_KEY = "Polyscript_Widget";
 
-    private static $dependencies = false;
     private static $initiated = false;
 
     public static function init()
