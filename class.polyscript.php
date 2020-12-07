@@ -95,6 +95,7 @@ class Polyscript
 
     public static function view($name, array $args = array())
     {
+        PolyscriptingState::sanitize_state();
         foreach ($args AS $key => $val) {
             $$key = $val;
         }
@@ -108,7 +109,7 @@ class Polyscript
 
     public static function set_header_status()
     {
-        if (self::header_type() == 'header') {
+        if (self::header_type() == 'header' && self::dependencies_check()) {
             $lang = '';
             if ('en_' !== substr(get_user_locale(), 0, 3)) {
                 $lang = ' lang="en"';
