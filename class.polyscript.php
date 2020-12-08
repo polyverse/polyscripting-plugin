@@ -175,6 +175,6 @@ class Polyscript
     }
 
     public static function dependencies_check() {
-        return file_exists("/usr/local/bin/polyscripting/build-scrambled.sh");
+        return file_exists("/usr/local/bin/polyscripting/build-scrambled.sh") && file_exists("/usr/local/bin/dispatch.sh");
     }
 }

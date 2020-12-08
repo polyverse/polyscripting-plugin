@@ -143,6 +143,9 @@ class PolyscriptingState
     }
 
     private static function send_scramble_signal($signal) {
+        if (!Polyscript::dependencies_check()) {
+            return false;
+        }
 
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         if (!$socket) {
