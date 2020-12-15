@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
         <script>window.location.reload()</script>
         <div>Scrambling...</div>
         <?php
+        //PolyscriptingState::check_full_table();
     }
     if (isset($_POST['polyscript-disable'])) {
         check_admin_referer('polyscript-admin');
