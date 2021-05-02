@@ -71,19 +71,32 @@ class PolyscriptingState
     {
         switch ($state) {
             case 'scrambling':
+                self::record_operation('scrambling');
                 self::signal_state_shift('scrambling');
                 break;
             case 'rescrambling':
+                self::record_operation('rescrambling');
                 self::signal_state_shift('rescrambling');
                 break;
             case 'disabling':
+                self::record_operation('disabling');
                 self::signal_state_shift('disabling');
                 break;
             default:
                 die ("Unknown Error Reached");
         }
     }
-
+    private static function record_operation($poly_operation){
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'occDB';
+        $user_name = wp_get_current_user();
+        $wpdb->insert( $table_name, array(
+            'time' => current_time( 'mysql' ),
+            'user' => $user_name->user_email,
+            'operation' => $poly_operation,
+            )
+        );        
+    }
     private static function check_rescramble_shift() {
         if (get_option('polyscript_dummy') != hash_file('md5', plugin_dir_path(__FILE__) . 'includes/dummy.php')) {
             delete_option('polyscript_dummy');

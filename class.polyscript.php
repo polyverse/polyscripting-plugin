@@ -1,7 +1,7 @@
 <?php
 /*
-Copyright (c) 2020 Polyverse Corporation
-*/
+   Copyright (c) 2020 Polyverse Corporation
+ */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -38,10 +38,10 @@ class Polyscript
         if (self::widget_set()) {
 
             wp_add_dashboard_widget(
-                self::WIDGET_KEY,
-                esc_html__('Polyscripting', 'polyscripting_for_wordpress'),
-                array('Polyscript', 'dashboard_widget_content')
-            );
+                    self::WIDGET_KEY,
+                    esc_html__('Polyscripting', 'polyscripting_for_wordpress'),
+                    array('Polyscript', 'dashboard_widget_content')
+                    );
 
             $normal_dashboard = $wp_meta_boxes['dashboard']['normal']['core'];
             $widget_instance = array(self::WIDGET_KEY => $normal_dashboard[self::WIDGET_KEY]);
@@ -67,8 +67,8 @@ class Polyscript
     {
 
         $links = array_merge(array(
-            '<a href="' . esc_url(admin_url('options-general.php?page=polyscript')) . '">' . __('Settings', 'textdomain') . '</a>'),
-            $links);
+                    '<a href="' . esc_url(admin_url('options-general.php?page=polyscript')) . '">' . __('Settings', 'textdomain') . '</a>'),
+                $links);
 
         return $links;
 
@@ -85,10 +85,10 @@ class Polyscript
     {
         if (self::header_type() == 'admin-bar') {
             $args = array(
-                'id' => 'Polyscript',
-                'title' => __('Polyscript ' . self::polyscript_enabled(), 'textdomain'),
-                'href' => esc_url(admin_url('options-general.php?page=polyscript'))
-            );
+                    'id' => 'Polyscript',
+                    'title' => __('Polyscript ' . self::polyscript_enabled(), 'textdomain'),
+                    'href' => esc_url(admin_url('options-general.php?page=polyscript'))
+                    );
             $wp_admin_bar->add_node($args);
         }
     }
@@ -116,10 +116,10 @@ class Polyscript
             }
 
             printf(
-                '<p id="poly"><span class="screen-reader-text">%s </span><span dir="ltr"%s>%s</span></p>',
-                __('Polyscript Status:'),
-                $lang,
-                __('Polyscript Status: ' . self::polyscript_enabled(), 'textdomain'));
+                    '<p id="poly"><span class="screen-reader-text">%s </span><span dir="ltr"%s>%s</span></p>',
+                    __('Polyscript Status:'),
+                    $lang,
+                    __('Polyscript Status: ' . self::polyscript_enabled(), 'textdomain'));
         }
     }
 
@@ -140,9 +140,9 @@ class Polyscript
             Polyscript::view('no-polyscript');
         } else {
             Polyscript::view('settings', array(
-                'header_type' => self::header_type(),
-                'widget_set' => self::widget_set(),
-                'state' => PolyscriptingState::get_saved_state()));
+                        'header_type' => self::header_type(),
+                        'widget_set' => self::widget_set(),
+                        'state' => PolyscriptingState::get_saved_state()));
         }
     }
 
@@ -162,6 +162,24 @@ class Polyscript
         PolyscriptingState::get_live_state() == 'Enabled'
             ? update_option('polyscript_state', 'on')
             :  update_option('polyscript_state', 'off') ;
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'occDB';
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE $table_name (
+                id mediumint(9) NOT NULL AUTO_INCREMENT,
+                time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                user text NOT NULL,
+                operation text NOT NULL,
+                PRIMARY KEY  (id)
+                ) $charset_collate;";
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+        $wpdb->insert( $table_name, array( 
+		    'time' => current_time( 'mysql' ), 
+		    'user' => wp_get_current_user()->user_email,  
+            'operation' => 'install',
+	        ) 
+        );
     }
 
     public static function widget_set()

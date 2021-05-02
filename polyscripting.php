@@ -34,5 +34,3 @@ if ( is_admin() ) {
 }
 
 add_action( 'init', array( 'Polyscript', 'init' ) );
-
-
