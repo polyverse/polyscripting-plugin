@@ -35,7 +35,8 @@ class Polyscript
     public static function register_dashboard_widget()
     {
         global $wp_meta_boxes;
-        if (self::widget_set()) {
+        if (self::widget_set() && self::dependencies_check())
+        {
 
             wp_add_dashboard_widget(
                     self::WIDGET_KEY,
@@ -65,7 +66,6 @@ class Polyscript
 
     public static function polyscript_action_links($links)
     {
-
         $links = array_merge(array(
                     '<a href="' . esc_url(admin_url('options-general.php?page=polyscript')) . '">' . __('Settings', 'textdomain') . '</a>'),
                 $links);
@@ -109,7 +109,7 @@ class Polyscript
 
     public static function set_header_status()
     {
-        if (self::header_type() == 'header') {
+        if (self::header_type() == 'header' && self::dependencies_check()) {
             $lang = '';
             if ('en_' !== substr(get_user_locale(), 0, 3)) {
                 $lang = ' lang="en"';
@@ -193,6 +193,6 @@ class Polyscript
     }
 
     public static function dependencies_check() {
-        return file_exists("/usr/local/bin/polyscripting/build-scrambled.sh");
+        return file_exists("/usr/local/bin/polyscripting/build-scrambled.sh") && file_exists("/usr/local/bin/dispatch.sh");
     }
 }
