@@ -14,6 +14,13 @@ This plugin also allows a live view of the current state of the site: polyscript
 
 It also allows access to the site's polyscripting history and health updates on the containers serving the wordpress site.
 
+![settings](includes/settingspolyscript.png) ![disabled](includes/settingsdisabled.png)
+
+![wiget](includes/polyscript%20widget.png)
+
+
+
+
 ### Further Reading
 
 To make use of this plugin see : https://github.com/polyverse/polyscripted-wordpress
@@ -30,6 +37,8 @@ To see a live example of WordPress utilizing polyscripting see: polyscripted.com
 This plugin requires configuration on the server serving the WordPress site.
 
 There is a minute or two delay while the site is changing state, tho your website will continue to be served, no updates should be made to the wordpress site during this time.
+
+![disabling](includes/disabling.png)
 
 
 Contributors: thetruestblue, chasehaluptzok
