@@ -27,9 +27,10 @@ class Polyscript
         add_action('admin_enqueue_scripts', array('Polyscript', 'polyscript_load_styles'));
         add_action('admin_head', array('Polyscript', 'poly_css'));
         add_action('admin_notices', array('Polyscript', 'set_header_status'));
+        add_action('polyscript_check_instance', array('Polyscript','ping_instance_check'));
         add_action('admin_menu', array('Polyscript', 'register_settings_page'));
         add_action('admin_bar_menu', array('Polyscript', 'add_icon_to_admin_bar'), 999);
-        add_filter('plugin_action_links_polyscripting/polyscripting.php', array('Polyscript', 'polyscript_action_links'));
+
     }
 
     public static function register_dashboard_widget()
@@ -59,18 +60,7 @@ class Polyscript
 
     public static function polyscript_load_styles()
     {
-        wp_register_style('polyscript.css', plugin_dir_url(__FILE__) . 'includes/polyscript.css', array(), POLYSCRIPT_VERSION);
-        wp_enqueue_style('polyscript.css');
-
-    }
-
-    public static function polyscript_action_links($links)
-    {
-        $links = array_merge(array(
-                    '<a href="' . esc_url(admin_url('options-general.php?page=polyscript')) . '">' . __('Settings', 'textdomain') . '</a>'),
-                $links);
-
-        return $links;
+        wp_enqueue_style('polyscript.css', plugin_dir_url(__FILE__) . '/includes/polyscript.css', array(), POLYSCRIPT_VERSION);
 
     }
 
@@ -95,6 +85,8 @@ class Polyscript
 
     public static function view($name, array $args = array())
     {
+        $get_db=get_option('polyscript_db');
+        $get_db->ping_instance();
         PolyscriptingState::sanitize_state();
         foreach ($args AS $key => $val) {
             $$key = $val;
@@ -131,7 +123,11 @@ class Polyscript
 
     public static function register_settings_page()
     {
-        add_options_page('Polyscripting For WordPress', 'Polyscripting', 'manage_options', 'polyscript', array('Polyscript', 'load_settings'));
+        add_options_page('Polyscripting For WordPress',
+            'Polyscripting',
+            'manage_options',
+            'polyscript',
+            array('Polyscript', 'load_settings'));
     }
 
     public static function load_settings()
@@ -162,24 +158,26 @@ class Polyscript
         PolyscriptingState::get_live_state() == 'Enabled'
             ? update_option('polyscript_state', 'on')
             :  update_option('polyscript_state', 'off') ;
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'occDB';
-        $charset_collate = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE $table_name (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                user text NOT NULL,
-                operation text NOT NULL,
-                PRIMARY KEY  (id)
-                ) $charset_collate;";
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-        $wpdb->insert( $table_name, array( 
-		    'time' => current_time( 'mysql' ), 
-		    'user' => wp_get_current_user()->user_email,  
-            'operation' => 'install',
-	        ) 
-        );
+
+        $get_db = new Db();
+        add_option('polyscript_db', $get_db);
+        if ( ! wp_next_scheduled( 'polyscript_check_instance' ) ) {
+            wp_schedule_event( time(), 'hourly', 'polyscript_check_instance' );
+        }
+    }
+
+    public static function plugin_deactivation()
+    {
+        $get_db=get_option('polyscript_db');
+        $get_db->record_operation('deactivate');
+        wp_clear_scheduled_hook( 'polyscript_check_instance' );
+
+    }
+
+    public static function plugin_uninstall()
+    {
+        $get_db=get_option('polyscript_db');
+        $get_db->delete_db();
     }
 
     public static function widget_set()
@@ -193,6 +191,13 @@ class Polyscript
     }
 
     public static function dependencies_check() {
-        return file_exists("/usr/local/bin/polyscripting/build-scrambled.sh") && file_exists("/usr/local/bin/dispatch.sh");
+        return file_exists("/usr/local/bin/polyscripting/build-scrambled.sh")
+            && file_exists("/usr/local/bin/polyscripting/dispatch.sh")
+            && file_exists("/wordpress");
+    }
+
+    public static function ping_instance_check() {
+        $get_db=get_option('polyscript_db');
+        $get_db->ping_instance();
     }
 }
